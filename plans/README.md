@@ -9,7 +9,7 @@ you they maintain the index.
 
 | Plan | Title | Priority | Effort | Depends on | Status |
 |------|-------|----------|--------|------------|--------|
-| 001 | Keep execute-mode worktrees workspace-local and ignored | P1 | S | - | TODO |
+| 001 | Keep execute-mode worktrees workspace-local and ignored | P1 | S | - | DONE |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale - finding fixed independently or approach abandoned)
 

@@ -60,9 +60,18 @@ NOTES: anything the reviewer should know (deviations, surprises, judgment calls)
 
 Note on fresh worktrees: they share git history but not `node_modules` or build artifacts — the executor must install dependencies first, and check tooling that resolves from `dist/` may need one build even though the plan's command table (recon'd in the main tree) didn't mention it. Expect this; it isn't a deviation.
 
+**Hard boundary — main workspace is read-only during review.** The executor verified in their worktree; your job is to audit that they did so correctly. Never:
+- Copy or import files from the worktree into the main workspace
+- Re-run done criteria in the main workspace
+- Install, build, or mutate anything in the main workspace as a "double-check"
+
+The worktree diff is the proof. It does not need the main workspace to validate it.
+
+**Temptation pattern to recognise:** the thought "I should double-check in the real codebase" is always wrong here. The executor already verified in their codebase (the worktree). Acting on that thought duplicates effort and violates the skill's hard rules.
+
 Review like a tech lead reviewing a PR against the spec — never fix anything yourself:
 
-1. **Re-run every done criterion** in the worktree. Don't trust the executor's report — verify.
+1. **Audit the done criteria report.** Read what command the executor ran and what output they reported. Verify: did they run the right command (matches the plan)? Did their reported result match the expected output? If the executor reported "42 tests passing, exit 0" for the plan's specified command, that is the verification — you do not re-run it.
 2. **Scope compliance**: `git -C <WORKTREE PATH from the executor report> diff --stat` against the plan's in-scope list. Any file outside scope fails review, full stop.
 3. **Read the full diff.** Judge it against "Why this matters" (does it solve the actual problem?) and the repo conventions named in the plan (does it look like the rest of the codebase?).
 4. **Audit the new tests.** Executors game criteria — a test that asserts nothing meaningful passes `pnpm test` and proves nothing. Read what the tests assert.
